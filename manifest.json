@@ -1,0 +1,13 @@
+{
+  "name": "Tradición Gourmet",
+  "short_name": "Tradición Gourmet",
+  "description": "Pide tus cakes de banana de Tradición Gourmet",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FFF8EE",
+  "theme_color": "#4E2A14",
+  "icons": [
+    { "src": "img/icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icono-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

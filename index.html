@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://unpkg.com; connect-src https://nominatim.openstreetmap.org; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Tradición Gourmet · Pedidos</title>
+<meta name="description" content="Pide tus cakes de banana de Tradición Gourmet y recíbelos en casa.">
+<meta name="theme-color" content="#4E2A14">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="img/icono-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tradición Gourmet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<div id="intro" class="intro">
+  <div class="intro-texto">
+    <h1>Tradición Gourmet</h1>
+    <p>Cada rebanada, un pedacito de felicidad 🍰</p>
+  </div>
+</div>
+
+<main id="pantallaCatalogo">
+  <header class="hero">
+    <img src="img/cake_especial.jpg" alt="">
+    <div class="hero-texto">
+      <h1>Tradición Gourmet</h1>
+      <p class="lema">Un legado delicioso</p>
+      <p class="antojo">¡No te quedes sin tu antojo semanal! 🍌</p>
+    </div>
+  </header>
+
+  <section class="contenido">
+    <h2>Nuestros cakes de banana</h2>
+    <p class="sub">Toca + para agregar a tu carrito</p>
+    <div id="listaCakes" class="lista-cakes"></div>
+  </section>
+
+  <footer class="pie">
+    <details>
+      <summary>Aviso de privacidad</summary>
+      <p><strong>Responsable:</strong> Tradición Gourmet. Contacto por WhatsApp: +593 98 755 8870.</p>
+      <p><strong>Qué datos usamos:</strong> tu nombre, celular, dirección, ubicación en el mapa (solo si la marcas) y los detalles de tu pedido.</p>
+      <p><strong>Para qué:</strong> únicamente para preparar, confirmar y entregar tu pedido. No vendemos ni compartimos tus datos con nadie más.</p>
+      <p><strong>Dónde se guardan:</strong> esta página no tiene servidor ni base de datos. Tus datos solo se envían al negocio por WhatsApp cuando tú confirmas el pedido. Si marcas "Guardar mis datos", se guardan solo en este dispositivo y puedes borrarlos cuando quieras.</p>
+      <p><strong>Tus derechos:</strong> puedes pedir que eliminemos tus datos o consultar cuáles tenemos escribiéndonos por WhatsApp, conforme a la Ley Orgánica de Protección de Datos Personales del Ecuador.</p>
+    </details>
+    <p class="creditos">© 2026 Tradición Gourmet · Mapa © colaboradores de OpenStreetMap · Desarrollado por Joel Serrano</p>
+  </footer>
+
+  <div class="barra">
+    <div>
+      <div id="resumenCantidad" class="barra-chico">Tu carrito está vacío</div>
+      <div id="resumenTotal" class="barra-total">$0</div>
+    </div>
+    <button id="btnVerCarrito" class="btn-rojo">Ver carrito 🛒</button>
+  </div>
+</main>
+
+<main id="pantallaCarrito" class="oculto">
+  <section class="contenido">
+    <button id="btnVolver" class="btn-texto">← Seguir comprando</button>
+    <h2 class="titulo-grande">Tu carrito 🛒</h2>
+    <p class="aviso">ℹ️ Tu pedido se confirmará por WhatsApp antes de prepararse</p>
+
+    <div id="listaCarrito"></div>
+    <p id="carritoVacio" class="vacio oculto">Tu carrito está vacío 😢<br>Vuelve y agrega algún cake</p>
+
+    <h3>📋 Tus datos</h3>
+    <label for="nombre">Nombre</label>
+    <input id="nombre" type="text" autocomplete="name" placeholder="Tu nombre">
+    <label for="telefono">Celular</label>
+    <input id="telefono" type="tel" autocomplete="tel" placeholder="0991234567">
+    <label class="check"><input id="guardarDatos" type="checkbox" checked> 💾 Guardar mis datos para la próxima compra</label>
+    <button id="btnBorrarDatos" class="btn-texto chico oculto">✅ Cargamos tus datos guardados · Borrarlos</button>
+
+    <h3>📍 ¿Dónde entregamos?</h3>
+    <div id="zonaGuardadas" class="oculto">
+      <p class="sub">Tus ubicaciones guardadas (toca para usar):</p>
+      <div id="chipsUbicaciones" class="chips"></div>
+    </div>
+    <label for="direccion">Dirección de entrega</label>
+    <input id="direccion" type="text" autocomplete="street-address" placeholder="Calle, número, referencia">
+    <button id="btnMapa" class="btn-cafe">🗺️ Marcar mi ubicación en el mapa</button>
+    <p id="textoUbicacion" class="sub">Así el negocio verá en Google Maps dónde entregar tu pedido</p>
+    <button id="btnGuardarUbicacion" class="btn-borde oculto">💾 Guardar esta ubicación</button>
+
+    <h3>📅 Fecha de entrega</h3>
+    <input id="fecha" type="date" aria-label="Fecha de entrega">
+
+    <h3>💳 ¿Cómo vas a pagar?</h3>
+    <label class="opcion"><input type="radio" name="pago" value="Efectivo"> 💵 Efectivo (pagas al recibir)</label>
+    <label class="opcion"><input type="radio" name="pago" value="Transferencia bancaria (envíame los datos, por favor)"> 🏦 Transferencia bancaria</label>
+    <p id="avisoTransferencia" class="aviso oculto">Te enviaremos los datos para transferir por WhatsApp al confirmar tu pedido 😊</p>
+
+    <label for="notas">Notas extra (opcional)</label>
+    <textarea id="notas" rows="2" placeholder="Ej: casa amarilla, segundo piso"></textarea>
+  </section>
+
+  <div class="barra">
+    <div>
+      <div class="barra-chico">Total a pagar</div>
+      <div id="totalCarrito" class="barra-total">$0</div>
+    </div>
+    <button id="btnPedir" class="btn-rojo">Pedir por WhatsApp</button>
+  </div>
+</main>
+
+<div id="pantallaMapa" class="mapa-pantalla oculto">
+  <div id="mapa"></div>
+  <img class="pin" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23D32F2F' stroke='white' stroke-width='0.8' d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E" alt="">
+  <div class="mapa-arriba">Mueve el mapa hasta que el pin 📍 quede sobre tu casa</div>
+  <div class="mapa-abajo">
+    <button id="btnMiUbicacion" class="btn-blanco">📍 Mi ubicación actual</button>
+    <button id="btnConfirmarPunto" class="btn-rojo">✅ Confirmar este punto</button>
+    <button id="btnCerrarMapa" class="btn-texto blanco">Cancelar</button>
+  </div>
+</div>
+
+<div id="mensaje" class="mensaje oculto"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="app.js"></script>
+</body>
+</html>
